@@ -25,8 +25,8 @@ let rec combine = function
 
 let make_dir_file = Sys.command "ls */ -d >> dir_names.txt"
 
-let dir = Array.to_list (Sys.readdir "adj")
-let curr_dir = Sys.chdir "adj"
+let dir = Array.to_list (Sys.readdir "adv")
+let curr_dir = Sys.chdir "adv"
 let adj = combine dir
   
 module Str = struct
