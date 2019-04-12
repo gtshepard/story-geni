@@ -38,8 +38,25 @@ module WordBank = Map.Make(Str)
 
 let rec make_word_bank map ls = 
    match ls with 
-   |[] -> map
-   |hd::tl -> make_word_bank (WordBank.add hd hd map) tl
+   | [] -> map
+   | hd::tl -> make_word_bank (WordBank.add hd hd map) tl
 
-let mapper = make_word_bank WordBank.empty adj
-let () = WordBank.iter (fun x y -> print_string x; print_string " "; print_string y; print_string " \n") mapper
+let word_bank = make_word_bank WordBank.empty adj
+
+module Int = struct 
+  type t = int 
+  let compare = Pervasives.compare
+end
+
+module WordId = Map.Make(Int)
+
+let rec make_word_id map ls = 
+  match ls with 
+  | [] -> map
+  | hd::tl -> make_word_id (WordId.add (List.length tl) hd map) tl
+
+let word_id = make_word_id WordId.empty adj
+
+let () = WordId.iter (fun x y -> print_int x; print_string " "; print_string y; print_string " \n") word_id
+  (*WordBank.iter (fun x y -> print_string x; print_string " "; print_string y; print_string " \n") word_bank*)
+
