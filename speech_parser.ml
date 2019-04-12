@@ -19,17 +19,27 @@ let read_all filename =
   in
   read []
 
-(*let argv = Array.to_list (Sys.argv) *)
-
 let rec combine = function 
    | hd::tl -> (read_all hd)@(combine tl)
    | [] -> []
 
-(*let adj = combine argv*)
-(* read all file names in from directory *)
+let make_dir_file = Sys.command "ls */ -d >> dir_names.txt"
 
 let dir = Array.to_list (Sys.readdir "adj")
 let curr_dir = Sys.chdir "adj"
 let adj = combine dir
+  
+module Str = struct
+  type t = string
+  let compare = Pervasives.compare
+end
 
-let () = adj |> List.iter (fun x -> print_string x; print_string "\n")
+module WordBank = Map.Make(Str)
+
+let rec make_word_bank map ls = 
+   match ls with 
+   |[] -> map
+   |hd::tl -> make_word_bank (WordBank.add hd hd map) tl
+
+let mapper = make_word_bank WordBank.empty adj
+let () = WordBank.iter (fun x y -> print_string x; print_string " "; print_string y; print_string " \n") mapper
