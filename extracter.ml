@@ -1,5 +1,4 @@
 open Pervasives 
-
 module Extracter = struct    
   (*retrieves a line from a file*)
   let get_line ic =
@@ -34,56 +33,3 @@ end
 
 (*generates a file with all subdirs in  name/  format  *)
 (*let make_dir_file = Sys.command "ls */ -d >> dir_names.txt"*)
-(*
-module Str = struct
-  type t = string
-  let compare = Pervasives.compare
-end
-
-module WordBank = Map.Make(Str)  
-
-module Int = struct 
-    type t = int 
-    let compare = Pervasives.compare
-end
-
-module WordId = Map.Make(Int)
-
-*)(*
-module Parser = struct
-    
-  let rec make_word_bank map ls = 
-     match ls with 
-    | [] -> map
-    | hd::tl -> make_word_bank (WordBank.add hd hd map) tl
-
-(*  let word_bank = make_word_bank WordBank.empty adj*)
-
-  let rec make_word_id map ls = 
-    match ls with 
-    | [] -> map
-    | hd::tl -> make_word_id (WordId.add (List.length tl) hd map) tl
-
-(*  let word_id = make_word_id WordId.empty adj*)
-
-  (*let print_word_id = WordId.iter (fun x y -> print_int x; print_string " "; print_string y; print_string " \n") word_id 
-   *)
-end
-*)
-(*
-let noun_files = Extracter.read "noun"
-let change_dir = Extracter.change "noun"
-let noun_list = Extracter.combine noun_files
-let chdir = Extracter.change ".."
-let noun_bank = Parser.make_word_bank WordBank.empty noun_list
-let noun_id = Parser.make_word_id WordId.empty noun_list
-*)
-(* 
-let print_word_id = WordId.iter (fun x y -> print_int x; print_string " "; print_string y; print_string " \n") noun_id
-let print_word_bank = WordBank.iter (fun x y -> print_string x; print_string " "; print_string y; print_string " \n") noun_bank
-*)
- 
-  (*List.iter (fun x -> print_string x; print_string "\n") noun_list*)
-  (*let () = WordId.iter (fun x y -> print_int x; print_string " "; print_string y; print_string " \n") word_id*)
-  (*WordBank.iter (fun x y -> print_string x; print_string " "; print_string y; print_string " \n") word_bank*)
-
