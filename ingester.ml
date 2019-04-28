@@ -15,7 +15,7 @@ module Ingester = struct
     let ic = open_in filename in
       let rec read acc =
         match get_line ic with
-        | Some line -> read (line :: acc)
+        | Some line -> read ((tokenize line) :: acc)
         | None -> close_in ic; acc
         in
           read []
@@ -34,5 +34,5 @@ module Ingester = struct
 end
 
 let ingest = List.rev (Ingester.read_all "passage.txt")
- 
-let () = List.iter (fun x -> print_string x; print_string "\n") ingest
+(*remember the Str module needs Str.cma when comppile ocamlc and Str.cmxa when compiled with ocamlopt it goes before the file name consider adding to make file*) 
+let () = List.iter (fun x -> List.iter (fun x -> print_string x; print_string "\n") x) ingest
