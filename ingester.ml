@@ -33,6 +33,6 @@ module Ingester = struct
 
 end
 
-let ingest = List.rev (Ingester.read_all "passage.txt")
+(*let ingest = List.rev (Ingester.read_all "passage.txt")*)
 (*remember the Str module needs Str.cma when comppile ocamlc and Str.cmxa when compiled with ocamlopt it goes before the file name consider adding to make file*) 
-let () = List.iter (fun x -> List.iter (fun x -> print_string x; print_string "\n") x) ingest
+(*let () = List.iter (fun x -> List.iter (fun x -> print_string x; print_string "\n") x) ingest*)
