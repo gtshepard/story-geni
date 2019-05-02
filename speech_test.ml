@@ -10,7 +10,6 @@ end
 
 module WordId = Map.Make(Int)
 
-
 module Parser = struct
   let rec make_word_bank map ls =
     match ls with
@@ -56,8 +55,8 @@ let move_back_verb = Extracter.change ".."
 let verb_bank = Parser.make_word_bank WordBank.empty verb_list
 let verb_id = Parser.make_word_id WordId.empty verb_list
 
-let ingest = List.flatten (List.rev (Ingester.read_all "passage1.txt"))
-
+(*let ingest = List.flatten (List.rev (Ingester.read_all "passage1.txt"))*)
+let ingest_file = Ingester.ingest "passage1.txt"
 let clean word = (Str.global_replace (Str.regexp "[^a-zA-Z]+") "" (word))
 
 let rec strip_adj ls =  
@@ -95,21 +94,10 @@ let rec strip_adv ls =
 
 
 (*let abstract = strip_speech ("__ad") (adj_bank) (ls)*)
-let prints = List.iter ( fun x -> print_string x;print_string " ") ingest
 
-(*
-let rec is_adj ls =
-  match ls with 
-  | hd::tl -> begin match hd with 
-              | hd2::tl2 -> if ((WordBank.mem (hd2) (adj_bank)) = true) then
-                               "_ad"::(is_adj (hd2) (tl2))
-                             else 
-                                hd2::(is_adj (hd2) (tl2))
-              | [] -> []
-              end 
-  | [] -> []
+(* prints out file contents before board prep *)
+let prints = List.iter ( fun x -> print_string x;print_string " ") ingest_file
 
-*)
 
 
 let is_verb word = if (WordBank.mem word (verb_bank) = true) then print_string "TRUE" else print_string "FALSE"
@@ -145,7 +133,7 @@ let is_verb word = if (WordBank.mem word (verb_bank) = true) then print_string "
  * output the list into a file, a story has been generated 
  * *)
 
-let list_no_adj = strip_adj ingest
+let list_no_adj = strip_adj ingest_file
 let list_no_noun = strip_noun list_no_adj
 let list_no_verb = strip_verb list_no_noun
 let list_no_adverb = strip_adv list_no_verb

@@ -19,6 +19,10 @@ module Ingester = struct
         | None -> close_in ic; acc
         in
           read []
+
+
+  let ingest file = List.flatten (List.rev (read_all file))
+
  (* 
   * a line is read. 
   * we break up the line by spaces (tokenize) use Ocaml Str
