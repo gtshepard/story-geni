@@ -130,10 +130,44 @@ let rec insert_adj ls =
                 hd::insert_adj tl
   |[]->[]
 
+let rec insert_noun ls = 
+  match ls with 
+  | hd::tl -> if hd = "__n" then 
+                (WordId.find (Random.int (List.length noun_list)) noun_id)::insert_noun tl                               
+              else 
+                hd::insert_noun tl
+  |[]->[]
+
+
+let rec insert_adverb ls = 
+  match ls with 
+  | hd::tl -> if hd = "__av" then 
+                (WordId.find (Random.int (List.length adv_list)) adv_id)::insert_adverb tl                               
+              else 
+                hd::insert_adverb tl
+  |[]->[]
+
+let rec insert_verb ls = 
+  match ls with 
+  | hd::tl -> if hd = "__v" then 
+                (WordId.find (Random.int (List.length verb_list)) verb_id)::insert_verb tl                               
+              else 
+                hd::insert_verb tl
+  |[]->[]
+
 
 let empty =  List.iter (fun x -> print_string x; print_string " ") list_no_adverb
 
 let with_adj = insert_adj list_no_adverb
+let break = print_string "\n"; print_string "\n"
+
+let with_noun  = insert_noun with_adj
+let break = print_string "\n"; print_string "\n"
+
+let with_adverb  = insert_adverb  with_noun
+let break = print_string "\n"; print_string "\n"
+
+let with_verb  = insert_verb with_adverb
 let break = print_string "\n"; print_string "\n"
 
 
@@ -145,6 +179,6 @@ let break = print_string "\n"; print_string "\n"
    83                else
    84                      hd::strip_noun tl
 *)
-
-let () = List.iter (fun x -> print_string x; print_string " ") with_adj
+let p = print_string "\n"
+let () = List.iter (fun x -> print_string x; print_string " ") with_verb
 
