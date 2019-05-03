@@ -30,6 +30,3 @@ module Extracter = struct
       | hd::tl -> (read_all hd)@(combine tl)
       | [] -> []
 end
-
-(*generates a file with all subdirs in  name/  format  *)
-(*let make_dir_file = Sys.command "ls */ -d >> dir_names.txt"*)

@@ -59,6 +59,12 @@ let verb_id = Parser.make_word_id WordId.empty verb_list
 let ingest_file = Ingester.ingest "passage1.txt"
 let clean word = (Str.global_replace (Str.regexp "[^a-zA-Z]+") "" (word))
 
+let is_mult x n = x mod n
+let index ls tl = (List.length ls) - (List.length tl)
+
+
+
+
 let rec strip_adj ls =  
     match ls with 
     | hd::tl -> if ((WordBank.mem (clean (hd)) (adj_bank)) = true) then
@@ -66,7 +72,6 @@ let rec strip_adj ls =
                 else 
                     hd::strip_adj tl
     | [] -> []
-
 
 let rec strip_verb ls =
     match ls with
@@ -97,9 +102,6 @@ let adj_rand = Random.int (List.length adj_list)
 
 let x = print_int adj_rand; print_string "\n"
 let y = print_int (List.length adj_list)
-
-
-
 
 (* prints out file contents before board prep *)
 let prints = List.iter ( fun x -> print_string x; print_string " ") ingest_file
@@ -155,7 +157,6 @@ let rec insert_verb ls =
                 hd::insert_verb tl
   |[]->[]
 
-
 let empty =  List.iter (fun x -> print_string x; print_string " ") list_no_adverb
 
 let with_adj = insert_adj list_no_adverb
@@ -170,15 +171,4 @@ let break = print_string "\n"; print_string "\n"
 let with_verb  = insert_verb with_adverb
 let break = print_string "\n"; print_string "\n"
 
-
-
-
-(*
-((WordBank.mem (clean (hd)) (noun_bank)) = true) then
-   82                      "__n"::strip_noun tl
-   83                else
-   84                      hd::strip_noun tl
-*)
-let p = print_string "\n"
 let () = List.iter (fun x -> print_string x; print_string " ") with_verb
-
