@@ -92,52 +92,59 @@ let rec strip_adv ls =
                           hd::strip_adv tl
     | [] -> []
 
+let init = Random.self_init()
+let adj_rand = Random.int (List.length adj_list)
 
-(*let abstract = strip_speech ("__ad") (adj_bank) (ls)*)
+let x = print_int adj_rand; print_string "\n"
+let y = print_int (List.length adj_list)
+
+
+
 
 (* prints out file contents before board prep *)
-let prints = List.iter ( fun x -> print_string x;print_string " ") ingest_file
-
-
+let prints = List.iter ( fun x -> print_string x; print_string " ") ingest_file
 
 let is_verb word = if (WordBank.mem word (verb_bank) = true) then print_string "TRUE" else print_string "FALSE"
-
- 
-
-(*
- * clean string before check
- * iterate through list. do 4 interations or do 1 
- *
- *
- *
- * *)
-
-
-(* List.iter (fun x -> List.iter (fun x -> print_string x; print_string "\n") x) ingest*)
-
-(*what if we are placing replacing a word with punctuation*)
-(* *)
-(* 
- * read passage.txt (story) using regex to remove punctuation 
- * check the word in each word bank. 
- * if no match record word in the list,
- * if match put _speech sign in the new list
- * repeat. do this for at most n/4 words (where n is the number of words in the passage)
- * once the entire passage has gone through. output the newly constructed list into a file with " " as delimiting character
- * 
- * read story_board file in to a list.
- * if not _speech sign, write to a new list 
- * if _speech sign, generate random number between 1 and WordID for part of speech place newly retrived word in new list
- * do this until end of story_board file 
- *
- * output the list into a file, a story has been generated 
- * *)
 
 let list_no_adj = strip_adj ingest_file
 let list_no_noun = strip_noun list_no_adj
 let list_no_verb = strip_verb list_no_noun
 let list_no_adverb = strip_adv list_no_verb
-
 let line_break = print_string "\n"; print_string "\n"
-let () = List.iter (fun x -> print_string x; print_string " ") list_no_adverb
-  (*List.iter (fun x -> print_string x; print_string "\n") verb_list*)
+
+let init = Random.self_init()
+let adj_rand = Random.int (List.length adj_list)
+
+let x = print_int adj_rand; print_string "\n"
+let y = print_int (List.length adj_list)
+
+let choose_adj = WordId.find (Random.int (List.length adj_list)) adj_id 
+let word = print_string "\n"; print_string choose_adj 
+
+
+let rec insert_adj ls = 
+  match ls with 
+  | hd::tl -> if hd = "__ad" then 
+                (WordId.find (Random.int (List.length adj_list)) adj_id)::insert_adj tl                               
+              else 
+                hd::insert_adj tl
+  |[]->[]
+
+
+let empty =  List.iter (fun x -> print_string x; print_string " ") list_no_adverb
+
+let with_adj = insert_adj list_no_adverb
+let break = print_string "\n"; print_string "\n"
+
+
+
+
+(*
+((WordBank.mem (clean (hd)) (noun_bank)) = true) then
+   82                      "__n"::strip_noun tl
+   83                else
+   84                      hd::strip_noun tl
+*)
+
+let () = List.iter (fun x -> print_string x; print_string " ") with_adj
+
