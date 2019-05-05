@@ -23,11 +23,15 @@ module Parser = struct
      | hd::tl -> make_word_id (WordId.add (List.length tl) hd map) tl
 end
 
+  
+let sys_args = List.rev (Array.to_list (Sys.argv))
+
 let noun_files = Extracter.read "noun"
 let change_to_noun = Extracter.change "noun"
 let noun_list = Extracter.combine noun_files
 let move_back_noun = Extracter.change ".."
 
+(* make word stores for nouns*)
 let noun_bank = Parser.make_word_bank WordBank.empty noun_list
 let noun_id = Parser.make_word_id WordId.empty noun_list
 
@@ -36,6 +40,7 @@ let change_to_adj = Extracter.change "adj"
 let adj_list = Extracter.combine adj_files
 let move_back_adj = Extracter.change ".."
 
+(* make word stores for adj*)
 let adj_bank = Parser.make_word_bank WordBank.empty adj_list
 let adj_id = Parser.make_word_id WordId.empty adj_list
 
@@ -44,6 +49,7 @@ let change_to_adv = Extracter.change "adv"
 let adv_list = Extracter.combine adv_files
 let move_back_adv = Extracter.change ".."
 
+(* make word stores for adv*)
 let adv_bank = Parser.make_word_bank WordBank.empty adv_list
 let adv_id = Parser.make_word_id WordId.empty adv_list
 
@@ -53,10 +59,31 @@ let change_to_verb = Extracter.change "verb"
 let verb_list = Extracter.combine verb_files
 let move_back_verb = Extracter.change ".."
 
+(* make word stores for verb*)
 let verb_bank = Parser.make_word_bank WordBank.empty verb_list
 let verb_id = Parser.make_word_id WordId.empty verb_list
 
-let ingest_file = Ingester.ingest "passage1.txt"
+let file_chooser = 
+    if List.length (List.rev (Array.to_list (Sys.argv))) = 1 then 
+      Ingester.ingest List.hd
+    else 
+      Ingester.ingest "passage1.txt"
+
+(*
+let remove_first ls =
+ 67     match ls with
+ 68    | hd::tl -> tl
+ 69    | []-> []
+ 70 
+ 71 let arg_list = remove_first (Array.to_list (Sys.argv))
+ 72 let file_output =
+ 73     if (List.length arg_list) = 0 then
+ 74         List.rev (List.map classify (read_all "MiniMakefile"))
+ 75     else
+ 76         List.rev (List.map classify (read_all (List.hd arg_list)))
+
+*)
+(*(let ingest_file = Ingester.ingest "passage1.txt"*)
 let clean word = (Str.global_replace (Str.regexp "[^a-zA-Z]+") "" (word))
 
 let rec strip_adj ls =
@@ -97,13 +124,6 @@ let line_breaks = print_string "\n";print_string "\n"
 
 let stripped_text_list = strip_adv (strip_verb (strip_noun (strip_adj ingest_file)))
 
-
-(*
-let list_no_adj = strip_adj ingest_file
-let list_no_noun = strip_noun list_no_adj
-let list_no_verb = strip_verb list_no_noun
-let list_no_adverb = strip_adv list_no_verb
-*)
 let rec insert_adj ls = 
   match ls with 
   | hd::tl -> if hd = "__ad" then 
@@ -137,11 +157,7 @@ let rec insert_verb ls =
                 hd::insert_verb tl
   |[]->[]
 
-(*let input speech  = Printf.printf "> adjective:  %!";
-     read_line()
-*)
 let input speech = print_string "\n"; Printf.printf speech;read_line()
-
 
 let rec fill_in_adj ls = 
   match ls with 
@@ -175,32 +191,11 @@ let rec fill_in_adverb ls =
                 hd::fill_in_adverb tl
   |[]->[]
 
-let empty =  List.iter (fun x -> print_string x; print_string " ") stripped_text_list
-
-(*
-let fill_adj = fill_in_adj list_no_adverb
-*)
-(*let verbiage =  List.iter (fun x -> print_string x; print_string " ") fill_adj*)
+let stripped = List.iter (fun x -> print_string x; print_string " ") stripped_text_list
 
 let fill = fill_in_adverb (fill_in_noun (fill_in_verb (fill_in_adj (stripped_text_list))))
+
 let break = print_string "\n";print_string "I FILLED THIS IN ABOVE"; print_string "\n"
-let () = List.iter (fun x -> print_string x; print_string " ") fill
+let insert = insert_adverb (insert_noun (insert_verb (insert_adj stripped_text_list)))
+let () = List.iter (fun x -> print_string x; print_string " ") fill; print_string "\n"; List.iter (fun x -> print_string x; print_string " ") insert
 
-(*
-
-let with_adj = insert_adj list_no_adverb
-let break = print_string "\n"; print_string "\n"
-
-let with_noun  = insert_noun with_adj
-let break = print_string "\n"; print_string "\n"
-
-let with_adverb  = insert_adverb  with_noun
-let break = print_string "\n"; print_string "\n"
-
-let with_verb  = insert_verb with_adverb
-let break = print_string "\n"; print_string "\n"
-*)
-
-(*
-let () = List.iter (fun x -> print_string x; print_string " ") with_verb
-*)
