@@ -1,6 +1,7 @@
 open Extracter
 open Ingester
 open Pervasives
+
 module WordBank = Map.Make(String) 
 
 module Int = struct
@@ -55,7 +56,6 @@ let move_back_verb = Extracter.change ".."
 let verb_bank = Parser.make_word_bank WordBank.empty verb_list
 let verb_id = Parser.make_word_id WordId.empty verb_list
 
-(*let ingest = List.flatten (List.rev (Ingester.read_all "passage1.txt"))*)
 let ingest_file = Ingester.ingest "passage1.txt"
 let clean word = (Str.global_replace (Str.regexp "[^a-zA-Z]+") "" (word))
 
@@ -91,33 +91,19 @@ let rec strip_adv ls =
                           hd::strip_adv tl
     | [] -> []
 
-let init = Random.self_init()
-let adj_rand = adj_list |> List.length |> Random.int
-
-let x = print_int adj_rand; print_string "\n"
-let y = print_int (List.length adj_list)
-
 (* prints out file contents before board prep *)
 let prints = List.iter ( fun x -> print_string x; print_string " ") ingest_file
+let line_breaks = print_string "\n";print_string "\n"
 
-let is_verb word = if (WordBank.mem word (verb_bank) = true) then print_string "TRUE" else print_string "FALSE"
+let stripped_text_list = strip_adv (strip_verb (strip_noun (strip_adj ingest_file)))
 
+
+(*
 let list_no_adj = strip_adj ingest_file
 let list_no_noun = strip_noun list_no_adj
 let list_no_verb = strip_verb list_no_noun
 let list_no_adverb = strip_adv list_no_verb
-let line_break = print_string "\n"; print_string "\n"
-
-let init = Random.self_init()
-let adj_rand = Random.int (List.length adj_list)
-
-let x = print_int adj_rand; print_string "\n"
-let y = print_int (List.length adj_list)
-
-let choose_adj = WordId.find (Random.int (List.length adj_list)) adj_id 
-let word = print_string "\n"; print_string choose_adj 
-
-
+*)
 let rec insert_adj ls = 
   match ls with 
   | hd::tl -> if hd = "__ad" then 
@@ -151,7 +137,56 @@ let rec insert_verb ls =
                 hd::insert_verb tl
   |[]->[]
 
-let empty =  List.iter (fun x -> print_string x; print_string " ") list_no_adverb
+(*let input speech  = Printf.printf "> adjective:  %!";
+     read_line()
+*)
+let input speech = print_string "\n"; Printf.printf speech;read_line()
+
+
+let rec fill_in_adj ls = 
+  match ls with 
+  | hd::tl -> if hd = "__ad" then 
+                (input ("adjective: "))::fill_in_adj tl
+              else 
+                hd::fill_in_adj tl
+  |[]->[]
+
+let rec fill_in_verb ls = 
+  match ls with 
+  | hd::tl -> if hd = "__v" then 
+                (input ("verb: "))::fill_in_verb tl
+              else 
+                hd::fill_in_verb tl
+  |[]->[]
+
+let rec fill_in_noun ls = 
+  match ls with 
+  | hd::tl -> if hd = "__n" then 
+                (input ("noun: "))::fill_in_noun tl
+              else 
+                hd::fill_in_noun tl
+  |[]->[]
+
+let rec fill_in_adverb ls = 
+  match ls with 
+  | hd::tl -> if hd = "__av" then 
+                (input ("adverb: "))::fill_in_adverb tl
+              else 
+                hd::fill_in_adverb tl
+  |[]->[]
+
+let empty =  List.iter (fun x -> print_string x; print_string " ") stripped_text_list
+
+(*
+let fill_adj = fill_in_adj list_no_adverb
+*)
+(*let verbiage =  List.iter (fun x -> print_string x; print_string " ") fill_adj*)
+
+let fill = fill_in_adverb (fill_in_noun (fill_in_verb (fill_in_adj (stripped_text_list))))
+let break = print_string "\n";print_string "I FILLED THIS IN ABOVE"; print_string "\n"
+let () = List.iter (fun x -> print_string x; print_string " ") fill
+
+(*
 
 let with_adj = insert_adj list_no_adverb
 let break = print_string "\n"; print_string "\n"
@@ -164,5 +199,8 @@ let break = print_string "\n"; print_string "\n"
 
 let with_verb  = insert_verb with_adverb
 let break = print_string "\n"; print_string "\n"
+*)
 
+(*
 let () = List.iter (fun x -> print_string x; print_string " ") with_verb
+*)
