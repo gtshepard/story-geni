@@ -1,6 +1,6 @@
 open Extracter
 open Ingester
-
+open Pervasives
 module WordBank = Map.Make(String) 
 
 module Int = struct
@@ -59,15 +59,9 @@ let verb_id = Parser.make_word_id WordId.empty verb_list
 let ingest_file = Ingester.ingest "passage1.txt"
 let clean word = (Str.global_replace (Str.regexp "[^a-zA-Z]+") "" (word))
 
-let is_mult x n = x mod n
-let index ls tl = (List.length ls) - (List.length tl)
-
-
-
-
-let rec strip_adj ls =  
+let rec strip_adj ls =
     match ls with 
-    | hd::tl -> if ((WordBank.mem (clean (hd)) (adj_bank)) = true) then
+    | hd::tl -> if ((WordBank.mem (clean (hd)) (adj_bank)) = true) && (((List.length tl) mod 3) = 0) then
                     "__ad"::strip_adj tl
                 else 
                     hd::strip_adj tl
@@ -75,7 +69,7 @@ let rec strip_adj ls =
 
 let rec strip_verb ls =
     match ls with
-   | hd::tl -> if ((WordBank.mem (clean (hd)) (verb_bank)) = true) then
+   | hd::tl -> if ((WordBank.mem (clean (hd)) (verb_bank)) = true) && (((List.length tl) mod 3) = 0) then
                      "__v"::strip_verb tl
                else
                      hd::strip_verb tl
@@ -83,7 +77,7 @@ let rec strip_verb ls =
 
 let rec strip_noun ls =
     match ls with
-   | hd::tl -> if ((WordBank.mem (clean (hd)) (noun_bank)) = true) then
+   | hd::tl -> if ((WordBank.mem (clean (hd)) (noun_bank)) = true) && (((List.length tl) mod 3) = 0) then
                      "__n"::strip_noun tl
                else
                      hd::strip_noun tl
@@ -91,14 +85,14 @@ let rec strip_noun ls =
 
 let rec strip_adv ls =
     match ls with
-    | hd::tl -> if ((WordBank.mem (clean (hd)) (adv_bank)) = true) then
+    | hd::tl -> if ((WordBank.mem (clean (hd)) (adv_bank)) = true) && (((List.length tl) mod 3) = 0) then
                           "__av"::strip_adv tl
                      else
                           hd::strip_adv tl
     | [] -> []
 
 let init = Random.self_init()
-let adj_rand = Random.int (List.length adj_list)
+let adj_rand = adj_list |> List.length |> Random.int
 
 let x = print_int adj_rand; print_string "\n"
 let y = print_int (List.length adj_list)
