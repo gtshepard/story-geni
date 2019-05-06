@@ -63,28 +63,21 @@ let move_back_verb = Extracter.change ".."
 let verb_bank = Parser.make_word_bank WordBank.empty verb_list
 let verb_id = Parser.make_word_id WordId.empty verb_list
 
-let file_chooser = 
-    if List.length (List.rev (Array.to_list (Sys.argv))) = 1 then 
-      Ingester.ingest List.hd
-    else 
-      Ingester.ingest "passage1.txt"
-
-(*
 let remove_first ls =
- 67     match ls with
- 68    | hd::tl -> tl
- 69    | []-> []
- 70 
- 71 let arg_list = remove_first (Array.to_list (Sys.argv))
- 72 let file_output =
- 73     if (List.length arg_list) = 0 then
- 74         List.rev (List.map classify (read_all "MiniMakefile"))
- 75     else
- 76         List.rev (List.map classify (read_all (List.hd arg_list)))
-
-*)
-(*(let ingest_file = Ingester.ingest "passage1.txt"*)
+      match ls with
+     | hd::tl -> tl
+     | []-> []
+  
+let arg_list = remove_first (Array.to_list (Sys.argv))
+let file_chooser = 
+     if (List.length arg_list) = 0 then
+         Ingester.ingest "passage1.txt"
+      else
+         Ingester.ingest (List.hd arg_list)
+   
 let clean word = (Str.global_replace (Str.regexp "[^a-zA-Z]+") "" (word))
+
+
 
 let rec strip_adj ls =
     match ls with 
@@ -119,10 +112,10 @@ let rec strip_adv ls =
     | [] -> []
 
 (* prints out file contents before board prep *)
-let prints = List.iter ( fun x -> print_string x; print_string " ") ingest_file
+let prints = List.iter ( fun x -> print_string x; print_string " ") file_chooser
 let line_breaks = print_string "\n";print_string "\n"
 
-let stripped_text_list = strip_adv (strip_verb (strip_noun (strip_adj ingest_file)))
+let stripped_text_list = strip_adv (strip_verb (strip_noun (strip_adj file_chooser)))
 
 let rec insert_adj ls = 
   match ls with 
@@ -192,10 +185,8 @@ let rec fill_in_adverb ls =
   |[]->[]
 
 let stripped = List.iter (fun x -> print_string x; print_string " ") stripped_text_list
-
 let fill = fill_in_adverb (fill_in_noun (fill_in_verb (fill_in_adj (stripped_text_list))))
-
-let break = print_string "\n";print_string "I FILLED THIS IN ABOVE"; print_string "\n"
 let insert = insert_adverb (insert_noun (insert_verb (insert_adj stripped_text_list)))
+
 let () = List.iter (fun x -> print_string x; print_string " ") fill; print_string "\n"; List.iter (fun x -> print_string x; print_string " ") insert
 
