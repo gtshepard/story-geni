@@ -9,6 +9,8 @@
 ```./story-geni passage.txt ```
 - or to run story geni on the default passage 
  ```./story-geni ```
+ - to redirect the output on the terminal to a file
+ ```./story-geni passage.txt  < output-file.txt```
   
  - Story geni will output a text file with containing the original passage and generated two stories. a user generated story and an auto generated story. 
  
