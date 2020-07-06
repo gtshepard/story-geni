@@ -19,7 +19,7 @@
 - Story Geni extracts and generates words based on a static set data set of 100,000 words loaded in upon program start up. words consist of nouns, adjectives, adverbs, and verbs. the data files have been included. 
 
 ### Limitations
-- A clear limitation of Story Geni is it lacks intelligence. to make up for these lackings would require the use of NLP. note the following shortcomings
+-  note the following 
   1. When a word is extracted from a passage tenses are not taken into consideration 
   2. All words are assumed to belong to single part of speech. 
   3. The context of the sentence is not taken into consideration 
@@ -30,4 +30,4 @@
 
 - When generating a story or prompting the user to finish a story Story Geni stops at each place holder in the story. if the story is auto generated Story Geni generates a random word for each place holder by generating a random number and using this value as a key for the Word ID map. the value at this key (a word of the request part of speech) is then placed into the story. (all word extraction and insertion is handled by building lists with the appporiate values) if it is a user that is finishing the story, the user is prompted to enter a value of (with a message displaying the part of speech) for each place holder in the text. 
 
-- NOTE: the arbitray value is used to help reduce the number of  words checked and removed from the passage. if each word was removed that belong to one fo the 4 parts of speech this program recognizes, then when a tory is generated it is less likley to read like an actual story (it wont make much sense) because of story geni's lack of intelligence. to add the lacking intelleignce would require the use of NLP. when we do not check every word we preserve more of the original sentence structure and have a higher chance of the sentence being decipehrable. 
+- NOTE: the arbitray value is used to help reduce the number of  words checked and removed from the passage. if each word was removed that belong to one fo the 4 parts of speech this program recognizes, then when a tory is generated it is less likley to read like an actual story (it wont make much sense). when we do not check every word we preserve more of the original sentence structure and have a higher chance of the sentence being decipehrable. 
